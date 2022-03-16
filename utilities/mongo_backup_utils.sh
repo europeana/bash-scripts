@@ -117,6 +117,11 @@ function restore_backup(){
   eval "mongorestore ${parameters}"
 }
 
+# Initializes the following global environment variables best on provided parameters
+# "${HOST}" "${PORT}" "${USERNAME}" "${PASSWORD}" "${AUTHENTICATION_DATABASE}" "${SSL_ENABLED}" "${CERTIFICATE}" "${BACKUP_DIRECTORY}" "${DATABASE}" "${BACKUP_SUFFIX}"
+# Example usage set_chosen_environment_fields_mongo_backup ${ENVIRONMENT} ${DATABASE_SELECTION}
+# ${1} environment
+# ${2} Database selection
 function set_chosen_environment_fields_mongo_backup(){
   local environment=${1}
   local database_selection=${2}
@@ -146,4 +151,46 @@ function set_chosen_environment_fields_mongo_backup(){
   BACKUP_DIRECTORY=${!name}
   name="${environment}_BACKUP_SUFFIX"
   BACKUP_SUFFIX=${!name}
+}
+
+# Initializes the following global environment variables best on provided parameters
+# "${HOST}" "${PORT}" "${USERNAME}" "${PASSWORD}" "${AUTHENTICATION_DATABASE}" "${SSL_ENABLED}" "${CERTIFICATE}" "${SOURCE_LATEST_BACKUP_DIRECTORY}" "${SOURCE_DATABASE}" "${SOURCE_BACKUP_DIRECTORY}" "${SOURCE_BACKUP_SUFFIX}" "${DATABASE}"
+# Example usage set_chosen_environment_fields_mongo_restore ${SOURCE_ENVIRONMENT} ${TARGET_ENVIRONMENT} ${DATABASE_SELECTION}
+# ${1} Source environment
+# ${2} Target environment
+# ${3} Database selection
+function set_chosen_environment_fields_mongo_restore() {
+  local source_environment=${1}
+  local target_environment=${1}
+  local database_selection=${3}
+  if [ -z "${source_environment}" ] || [ -z "${target_environment}" ] || [ -z "${DATABASE_SELECTION}" ]; then
+    printf "ERROR: SOURCE_ENVIRONMENT OR TARGET_ENVIRONMENT OR DATABASE_SELECTION is empty. Exiting..\n"
+    exit 1
+  fi
+
+  # Compute variables with indirection
+  # SOURCE
+  name="${source_environment}_${database_selection}_DATABASE"
+  SOURCE_DATABASE=${!name}
+  name="${source_environment}_BACKUP_DIRECTORY"
+  SOURCE_BACKUP_DIRECTORY=${!name}
+  name="${source_environment}_BACKUP_SUFFIX"
+  SOURCE_BACKUP_SUFFIX=${!name}
+  # TARGET
+  name="${target_environment}_${database_selection}_DATABASE"
+  DATABASE=${!name}
+  name="${target_environment}_HOST"
+  HOST=${!name}
+  name="${target_environment}_PORT"
+  PORT=${!name}
+  name="${target_environment}_USERNAME"
+  USERNAME=${!name}
+  name="${target_environment}_PASSWORD"
+  PASSWORD=${!name}
+  name="${target_environment}_AUTHENTICATION_DATABASE"
+  AUTHENTICATION_DATABASE=${!name}
+  name="${target_environment}_SSL_ENABLED"
+  SSL_ENABLED=${!name}
+  name="${target_environment}_CERTIFICATE"
+  CERTIFICATE=${!name}
 }
