@@ -159,3 +159,63 @@ function start_solr_restore() {
   printf "Starting restore with parameters: %s\n" "${solr_endpoint}${parameters}"
   curl "${solr_endpoint}${parameters}"
 }
+
+# Initializes the following global environment variables best on provided parameters
+# "${HOST}" "${PORT}" "${BACKUP_DIRECTORY}" "${BACKUP_SUFFIX}" "${DATABASE}"
+# Example usage set_chosen_environment_fields_solr_backup ${ENVIRONMENT} ${DATABASE_SELECTION}
+# ${1} environment
+# ${2} Database selection
+function set_chosen_environment_fields_solr_backup(){
+  local environment=${1}
+  local database_selection=${2}
+  if [ -z "${environment}" ] || [ -z "${database_selection}" ]; then
+    printf "ERROR: DATABASE_SELECTION is empty. Exiting..\n"
+    exit 1
+  fi
+
+  # Compute variables with indirection
+  name="${environment}_${database_selection}_DATABASE"
+  DATABASE=${!name}
+  name="${environment}_HOST"
+  HOST=${!name}
+  name="${environment}_PORT"
+  PORT=${!name}
+  name="${environment}_BACKUP_DIRECTORY"
+  BACKUP_DIRECTORY=${!name}
+  name="${environment}_BACKUP_SUFFIX"
+  BACKUP_SUFFIX=${!name}
+}
+
+# Initializes the following global environment variables best on provided parameters
+# "${HOST}" "${PORT}" "${REPLICATION_FACTOR}"  "${SOURCE_DATABASE}" "${SOURCE_BACKUP_DIRECTORY}" "${SOURCE_BACKUP_SUFFIX}" "${DATABASE}"
+# Example usage set_chosen_environment_fields_solr_restore ${SOURCE_ENVIRONMENT} ${TARGET_ENVIRONMENT} ${DATABASE_SELECTION}
+# ${1} Source environment
+# ${2} Target environment
+# ${3} Database selection
+function set_chosen_environment_fields_solr_restore() {
+  local source_environment=${1}
+  local target_environment=${1}
+  local database_selection=${3}
+  if [ -z "${source_environment}" ] || [ -z "${target_environment}" ] || [ -z "${database_selection}" ]; then
+    printf "ERROR: SOURCE_ENVIRONMENT OR TARGET_ENVIRONMENT OR DATABASE_SELECTION is empty. Exiting..\n"
+    exit 1
+  fi
+
+  # Compute variables with indirection
+  # SOURCE
+  name="${source_environment}_${database_selection}_DATABASE"
+  SOURCE_DATABASE=${!name}
+  name="${source_environment}_BACKUP_DIRECTORY"
+  SOURCE_BACKUP_DIRECTORY=${!name}
+  name="${source_environment}_BACKUP_SUFFIX"
+  SOURCE_BACKUP_SUFFIX=${!name}
+  # TARGET
+  name="${target_environment}_${database_selection}_DATABASE"
+  DATABASE=${TEST_ENTITY_MANAGEMENT_DATABASE}
+  name="${target_environment}_HOST"
+  HOST=${TEST_HOST}
+  name="${target_environment}_PORT"
+  PORT=${TEST_PORT}
+  name="${target_environment}_REPLICATION_FACTOR"
+  REPLICATION_FACTOR=${TEST_REPLICATION_FACTOR}
+}

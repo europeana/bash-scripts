@@ -154,7 +154,7 @@ function set_chosen_environment_fields_mongo_backup(){
 }
 
 # Initializes the following global environment variables best on provided parameters
-# "${HOST}" "${PORT}" "${USERNAME}" "${PASSWORD}" "${AUTHENTICATION_DATABASE}" "${SSL_ENABLED}" "${CERTIFICATE}" "${SOURCE_LATEST_BACKUP_DIRECTORY}" "${SOURCE_DATABASE}" "${SOURCE_BACKUP_DIRECTORY}" "${SOURCE_BACKUP_SUFFIX}" "${DATABASE}"
+# "${HOST}" "${PORT}" "${USERNAME}" "${PASSWORD}" "${AUTHENTICATION_DATABASE}" "${SSL_ENABLED}" "${CERTIFICATE}" "${SOURCE_DATABASE}" "${SOURCE_BACKUP_DIRECTORY}" "${SOURCE_BACKUP_SUFFIX}" "${DATABASE}"
 # Example usage set_chosen_environment_fields_mongo_restore ${SOURCE_ENVIRONMENT} ${TARGET_ENVIRONMENT} ${DATABASE_SELECTION}
 # ${1} Source environment
 # ${2} Target environment
