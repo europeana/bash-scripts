@@ -116,3 +116,34 @@ function restore_backup(){
   printf "Starting restore with parameters: %s\n" "${parameters}"
   eval "mongorestore ${parameters}"
 }
+
+function set_chosen_environment_fields_mongo_backup(){
+  local environment=${1}
+  local database_selection=${2}
+  if [ -z "${environment}" ] || [ -z "${database_selection}" ]; then
+    printf "ERROR: environment OR database selection is empty. Exiting..\n"
+    exit 1
+  fi
+
+  # Compute variables with indirection
+  name="${environment}_${database_selection}_DATABASE"
+  DATABASE=${!name}
+  name="${environment}_HOST"
+  HOST=${!name}
+  name="${environment}_PORT"
+  PORT=${!name}
+  name="${environment}_USERNAME"
+  USERNAME=${!name}
+  name="${environment}_PASSWORD"
+  PASSWORD=${!name}
+  name="${environment}_AUTHENTICATION_DATABASE"
+  AUTHENTICATION_DATABASE=${!name}
+  name="${environment}_SSL_ENABLED"
+  SSL_ENABLED=${!name}
+  name="${environment}_CERTIFICATE"
+  CERTIFICATE=${!name}
+  name="${environment}_BACKUP_DIRECTORY"
+  BACKUP_DIRECTORY=${!name}
+  name="${environment}_BACKUP_SUFFIX"
+  BACKUP_SUFFIX=${!name}
+}
