@@ -161,7 +161,7 @@ function set_chosen_environment_fields_mongo_backup(){
 # ${3} Database selection
 function set_chosen_environment_fields_mongo_restore() {
   local source_environment=${1}
-  local target_environment=${1}
+  local target_environment=${2}
   local database_selection=${3}
   if [ -z "${source_environment}" ] || [ -z "${target_environment}" ] || [ -z "${DATABASE_SELECTION}" ]; then
     printf "ERROR: SOURCE_ENVIRONMENT OR TARGET_ENVIRONMENT OR DATABASE_SELECTION is empty. Exiting..\n"
