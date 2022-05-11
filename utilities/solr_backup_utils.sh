@@ -211,11 +211,11 @@ function set_chosen_environment_fields_solr_restore() {
   SOURCE_BACKUP_SUFFIX=${!name}
   # TARGET
   name="${target_environment}_${database_selection}_DATABASE"
-  DATABASE=${TEST_ENTITY_MANAGEMENT_DATABASE}
+  DATABASE=${!name}
   name="${target_environment}_HOST"
-  HOST=${TEST_HOST}
+  HOST=${!name}
   name="${target_environment}_PORT"
-  PORT=${TEST_PORT}
+  PORT=${!name}
   name="${target_environment}_REPLICATION_FACTOR"
-  REPLICATION_FACTOR=${TEST_REPLICATION_FACTOR}
+  REPLICATION_FACTOR=${!name}
 }
