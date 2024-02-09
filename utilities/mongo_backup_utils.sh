@@ -54,7 +54,7 @@ function take_mongo_dump() {
   local database_backup_directory="${9}"
 
   #Structure parameters based on input
-  local parameters="--host ${host}"
+  local parameters="--forceTableScan --host ${host}"
   if [ -n "${port}" ]; then
     parameters="${parameters} --port ${port}"
   fi
@@ -67,7 +67,7 @@ function take_mongo_dump() {
     parameters="${parameters} --ssl"
   fi
   if [ -n "${certificate}" ]; then
-    parameters="${parameters} --sslCAFile <(echo -n '${certificate}')"
+    parameters="${parameters} --sslCAFile '${certificate}'"
   fi
   parameters="${parameters} --out ${database_backup_directory} --gzip"
   printf "Starting backup with parameters: %s\n" "${parameters}"
@@ -109,7 +109,7 @@ function restore_backup(){
     parameters="${parameters} --ssl"
   fi
   if [ -n "${certificate}" ]; then
-    parameters="${parameters} --sslCAFile <(echo -n '${certificate}')"
+    parameters="${parameters} --sslCAFile '${certificate}'"
   fi
 
   parameters="${parameters} --nsFrom ${source_database}.* --nsTo ${target_database}.* --drop --gzip ${database_directory}"
