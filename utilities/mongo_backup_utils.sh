@@ -54,7 +54,7 @@ function take_mongo_dump() {
   local database_backup_directory="${9}"
 
   #Structure parameters based on input
-  local parameters="--forceTableScan --host ${host}"
+  local parameters="--host ${host}"
   if [ -n "${port}" ]; then
     parameters="${parameters} --port ${port}"
   fi
